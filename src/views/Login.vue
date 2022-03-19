@@ -2,6 +2,7 @@
     <div>
         <h1>XX二手交易平台</h1>
         <div class="container">
+            <!--            登录-->
             <el-card v-show="form.model===''||form.model==='login'">
                 <el-form ref="form" :model="loginForm" label-width="60px">
                     <el-form-item label="账户">
@@ -20,6 +21,7 @@
                     <el-button @click="loginBtn">登录</el-button>
                 </el-form>
             </el-card>
+            <!--            注册-->
             <el-card v-show="form.model==='register'">
                 <el-form ref="form" :model="form" label-width="60px">
                     <el-row :gutter="20">
@@ -48,6 +50,7 @@
                     <el-button>注册</el-button>
                 </el-form>
             </el-card>
+            <!--            忘记密码-->
             <el-card v-show="form.model==='forgotPassword'">
                 <el-form ref="form" :model="form" label-width="60px">
                     <el-row :gutter="20">
@@ -82,6 +85,7 @@
 
 <script>
 import Vue from 'vue';
+
 export default {
     // name: "login",
     data() {
@@ -92,7 +96,7 @@ export default {
                 model: '',
                 verificationCode: ''
             },
-            loginForm:{
+            loginForm: {
                 userPhone: '',
                 userPassword: ''
             }
@@ -106,25 +110,24 @@ export default {
         },
         // 登录接口
         loginBtn() {
-           this.$http.post("sys/sysLogin",{
-              userPhone: this.loginForm.userPhone,
-              userPassword: this.loginForm.userPassword
-           }).then((res) =>{
-               if(res.data.code==200){
-                 window.sessionStorage.setItem("token",res.data.data2);
-                 window.sessionStorage.setItem("userPic",res.data.data.userPic);
-                 window.sessionStorage.setItem("userId",res.data.data.userId);
-                 window.sessionStorage.setItem("userPhone",res.data.data.userPhone);
-                 window.sessionStorage.setItem("userName",res.data.data.userName);
-                 //通过编程式导航跳转到后台主页，路由地址是home
-                 this.$router.push({ path: "/home" });
-               } 
+            this.$http.post("sys/sysLogin", {
+                userPhone: this.loginForm.userPhone,
+                userPassword: this.loginForm.userPassword
+            }).then((res) => {
+                if (res.data.code == 200) {
+                    window.sessionStorage.setItem("token", res.data.data2);
+                    window.sessionStorage.setItem("userPic", res.data.data.userPic);
+                    window.sessionStorage.setItem("userId", res.data.data.userId);
+                    window.sessionStorage.setItem("userPhone", res.data.data.userPhone);
+                    window.sessionStorage.setItem("userName", res.data.data.userName);
+                    //通过编程式导航跳转到后台主页，路由地址是home
+                    this.$router.push({path: "/home"});
+                }
             });
         }
     }
 }
 </script>
-
 
 
 <style scoped lang="scss">

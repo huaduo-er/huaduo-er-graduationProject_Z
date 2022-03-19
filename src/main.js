@@ -15,7 +15,7 @@ Vue.use(ElementUI) //使用elementUI
 // 导入axios
 import axios from 'axios'
 // 配置请求的根路径
-axios.defaults.baseURL = "http://localhost:8099/"
+axios.defaults.baseURL = "http://47.94.96.115:8099/"
 // 挂载原型
 Vue.prototype.$http = axios
 

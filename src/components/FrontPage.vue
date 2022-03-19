@@ -6,7 +6,7 @@
             <div>
                 <el-row>
                     <el-col :span="6">
-                        <el-select v-model="typeId" placeholder="请选择类型" clearable="true">
+                        <el-select v-model="typeId" placeholder="请选择类型">
                             <el-option
                                     v-for="item in goodsType"
                                     :key="item.typeId"
@@ -16,44 +16,50 @@
                         </el-select>
                     </el-col>
                     <el-col :span="6" :offset="3">
-                        <el-input v-model="input" placeholder="请输入搜索的内容" clearable="true"></el-input>
+                        <el-input v-model="input" placeholder="请输入搜索的内容"></el-input>
                     </el-col>
                     <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
                 </el-row>
             </div>
-        <div><h1></h1></div>
+            <div><h1></h1></div>
             <!-- 展示区 -->
             <el-row :gutter="20">
                 <el-col :span="22">
                     <div class="grid-content bg-purple">
                         <div class="container" v-for="(item, index) in des" :key="index">
-                            <img :src=item.picName class="img" />
+                            <img :src=item.picName class="img"/>
                             <div class="desc">
-                                <div>{{ item.goodsTitle }}</div>
+                                <div class="title">
+                                    <div>{{ item.goodsTitle }}</div>
+                                    <div>{{ item.goodsType }}
+                                    </div>
+                                </div>
                                 <div>
-                                    <div>{{ item.goodsType }}</div>
-                                    <div>{{ item.createTime }}</div>
-                                    <div class="goodsInfo">{{ item.goodsInfo }}</div>
+                                    <div>
+                                        <span>{{ item.createTime.substring(0, 10) }}</span>&nbsp;
+                                        <span>{{ item.createTime.substring(11, 19) }}</span>
+                                    </div>
                                 </div>
-                                <div class="btn">
-                                    <template>
-                                        <el-button size="mini" class="fix" @click="msgs(item)">私信</el-button>
-                                        <el-button size="mini" @click="desc(item.goodsId)">详情</el-button>
-                                    </template>
-                                </div>
+                            </div>
+                            <div class="goodsInfo">{{ item.goodsInfo }}</div>
+                            <div class="btn">
+                                <template>
+                                    <el-button size="mini" class="fix" @click="msgs(item)">私信</el-button>
+                                    <el-button size="mini" @click="desc(item.goodsId)">详情</el-button>
+                                </template>
                             </div>
                         </div>
                     </div>
                 </el-col>
             </el-row>
             <!-- 分页 -->
-            <el-pagination
-                    background
-                    layout="prev, pager, next"
-                    page-size="3"
-                    @current-change="page"
-                    :total="1000">
-            </el-pagination>
+            <!--            <el-pagination-->
+            <!--                    background-->
+            <!--                    layout="prev, pager, next"-->
+            <!--                    page-size="3"-->
+            <!--                    @current-change="page"-->
+            <!--                    :total="1000">-->
+            <!--            </el-pagination>-->
         </div>
         <!-- 私信 -->
         <div class="massageDetail" v-show="massage">
@@ -103,31 +109,28 @@
             </div>
             <div class="content" style="overflow-y:scroll;overflow-x:hidden;height:100%">
                 <div class="avatar-container">
-                    <img :src=goodsInfos.userPic class="avatar" />
-                    <span class="fix">{{goodsInfos.userName}}</span>
-                    <span class="fix">{{goodsInfos.createTime}}</span>
-                </div>
-                <div class="flex">
-                    <div>类别:</div>
+                    <img :src=goodsInfos.userPic class="avatar"/>
                     <div>
-                        {{goodsInfos.goodsType}}
+                        <span class="nickName">{{ goodsInfos.userName }}</span>
+                        <span v-if="goodsInfos.createTime">{{ goodsInfos.createTime.substring(0, 10) }}</span>&nbsp;
+                        <span v-if="goodsInfos.createTime">{{ goodsInfos.createTime.substring(11, 19) }}</span>
                     </div>
                 </div>
-                <div class="flex fix">
-                    <div>说明:</div>
-                    <div>
-                        {{goodsInfos.goodsInfo}}
-                    </div>
+                <div>
+                    <div class="text">类别:{{ goodsInfos.goodsType }}</div>
+                </div>
+                <div>
+                    <div class="text">说明:{{ goodsInfos.goodsInfo }}</div>
                 </div>
                 <div class="img-bigContainer">
-                    <span>图片:</span>
+                    <div class="text">图片:</div>
                     <div class="img-container" v-for="(item, index) in goodsInfos.pics" :key="index">
                         <div class="demo-image__preview">
-                        <el-image 
-                            style="width: 100px; height: 100px"
-                            :src=item.picName
-                            :preview-src-list="srcList">
-                        </el-image>
+                            <el-image
+                                    style="width: 100px; height: 100px"
+                                    :src=item.picName
+                                    :preview-src-list="srcList">
+                            </el-image>
                         </div>
                     </div>
                 </div>
@@ -136,21 +139,21 @@
                     <div>留言:</div>
                     <div class="massage-container" style="overflow-y:scroll;overflow-x:hidden;height:100%">
                         <div v-for="(item, index) in goodsInfos.msgs" :key="index">
-                        <div class="massage">
-                            <!-- <div class="avatar"></div> -->
-                            <img :src=item.userPic class="avatar" />
-                            <div>
+                            <div class="massage">
+                                <!-- <div class="avatar"></div> -->
+                                <img :src=item.userPic class="avatar"/>
                                 <div>
-                                    <span class="fix">{{item.userName}}</span>
-                                    <span class="fix">{{item.createTime}}</span>
+                                    <div>
+                                        <span class="fix">{{ item.userName }}</span>
+                                        <span class="fix">{{ item.createTime }}</span>
+                                    </div>
+                                    <div>{{ item.msgInfo }}</div>
                                 </div>
-                                <div>{{item.msgInfo}}</div>
+                                <div class="fix">
+                                    <el-button size="mini" @click="replyDialog">回复</el-button>
+                                    <el-button size="mini">详情</el-button>
+                                </div>
                             </div>
-                            <div class="fix">
-                                <el-button size="mini" @click="replyDialog">回复</el-button>
-                                <el-button size="mini">详情</el-button>
-                            </div>
-                        </div>
                         </div>
                     </div>
                     <div>
@@ -199,48 +202,50 @@ export default {
             this.pages = page
             this.getGoods()
         },
-        getType() {//获取类型
+        getType() {//选择框类型接口
             this.userPhone = window.sessionStorage.getItem("userPhone")//当前登录电话
-            this.$http.get("index/getGoodsTypes",{}).then((res) =>{
-               if(res.data.code==200){
-                 this.goodsType = res.data.data
-               } 
+            this.$http.get("index/getGoodsTypes", {}).then((res) => {
+                if (res.data.code === 200) {
+                    this.goodsType = res.data.data
+                }
             });
         },
         search() {//搜索
             this.page = 1
-            this.$http.post("index/getGoodsList",{
-                page : (this.pages - 1)*3,
-                limit : this.limit,
-                typeId : this.typeId,
-                input : this.input
-            }).then((res) =>{
-               if(res.data.code==200){
-                   this.$message.success('查询成功')
-                   this.des = res.data.data
-               }
+            this.$http.post("index/getGoodsList", {
+                page: (this.pages - 1) * 3,
+                limit: this.limit,
+                typeId: this.typeId,
+                input: this.input
+            }).then((res) => {
+                if (res.data.code === 200) {
+                    this.$message.success('查询成功')
+                    this.des = res.data.data
+                }
             });
         },
         getGoods() {//获取物品
-            this.$http.post("index/getGoodsList",{
-                page : (this.pages -1)*3,
-                limit : this.limit
-            }).then((res) =>{
-               if(res.data.code==200){
-                   this.$message.success('查询成功')
-                   this.des = res.data.data
-               } 
+            this.$http.post("index/getGoodsList", {
+                page: (this.pages - 1) * 3,
+                limit: this.limit
+            }).then((res) => {
+                if (res.data.code == 200) {
+                    this.$message.success('查询成功')
+                    this.des = res.data.data
+                    console.log('获取物品', res.data.data)
+                }
             });
         },
         desc(goodsid) {//详情
             this.openDes = true
-            this.$http.post("index/findOneGoods",{
-                goodsId : goodsid,
-            }).then((res) =>{
-               if(res.data.code==200){
-                   this.$message.success('详情查询成功')
-                   this.goodsInfos = res.data.data
-               } 
+            this.$http.post("index/findOneGoods", {
+                goodsId: goodsid,
+            }).then((res) => {
+                if (res.data.code == 200) {
+                    this.$message.success('详情查询成功')
+                    this.goodsInfos = res.data.data
+                    console.log('获取详情', res.data.data)
+                }
             });
         },
         chat2() {//详情返回
@@ -251,60 +256,60 @@ export default {
         },
         msgs(item) {//私信
             this.massage = true
-            if(item.userId == window.sessionStorage.getItem("userId")) {
+            if (item.userId == window.sessionStorage.getItem("userId")) {
                 this.$message.error("私信错误")
                 this.massage = false
                 return
             }
             this.userPhone2 = item.userPhone
             this.creatSocket()
-            
+
         },
-        senmsg(){//私信消息发送
+        senmsg() {//私信消息发送
             // alert(this.chatInfo)
             this.$global.sendMsg(this.chatInfo)
         },
         creatSocket() {
             let that = this;
             if ("WebSocket" in window) {
-                console.log("您的浏览器支持 WebSocket!");	
-                //实例化websocket	 
+                console.log("您的浏览器支持 WebSocket!");
+                //实例化websocket
                 that.ws = new WebSocket("ws://localhost:8099/websocket/" + this.userPhone + "/" + this.userPhone2);
-                        //保存设置全局websocket对象
-                        that.$global.setWs(that.ws);
-                        //监听websocket连接打开方法
-                        that.ws.onopen = function() {
-                            this.$message.success("已连接s")
-                            //调用keepalive方法（不一定都需要调用此方法，可注释）
-                            //that.keepAlive()
-                        }
-                        //监听websocket错误方法
-                        that.ws.onerror = function(ev) {
-                            this.$message.error("连接已出错...")
-                            //延迟执行重连
-                            setTimeout(() => {
-                                that.creatSocket();
-                            }, that.$global.delay);
-                        };
-                        //监听websocket关闭方法
-                        that.ws.onclose = function(ev) {
-                            // 关闭 websocket
-                            this.$message.error("连接已关闭...")
-                            //延迟执行重连
-                            setTimeout(() => {
-                                that.creatSocket();
-                            }, that.$global.delay);
-                        };
-                        //监听websocket接收消息事件（接收来自服务器的实时消息）
-                        that.ws.onmessage = function(res) {
+                //保存设置全局websocket对象
+                that.$global.setWs(that.ws);
+                //监听websocket连接打开方法
+                that.ws.onopen = function () {
+                    this.$message.success("已连接s")
+                    //调用keepalive方法（不一定都需要调用此方法，可注释）
+                    //that.keepAlive()
+                }
+                //监听websocket错误方法
+                that.ws.onerror = function (ev) {
+                    this.$message.error("连接已出错...")
+                    //延迟执行重连
+                    setTimeout(() => {
+                        that.creatSocket();
+                    }, that.$global.delay);
+                };
+                //监听websocket关闭方法
+                that.ws.onclose = function (ev) {
+                    // 关闭 websocket
+                    this.$message.error("连接已关闭...")
+                    //延迟执行重连
+                    setTimeout(() => {
+                        that.creatSocket();
+                    }, that.$global.delay);
+                };
+                //监听websocket接收消息事件（接收来自服务器的实时消息）
+                that.ws.onmessage = function (res) {
 
-                            console.log("App.vue收到服务器内容", res.data);
-                            alert(res.data)
-                        };
-                    } else {
-                        // 浏览器不支持 WebSocket
-                        console.log("您的浏览器不支持 WebSocket!");
-                    }
+                    console.log("App.vue收到服务器内容", res.data);
+                    alert(res.data)
+                };
+            } else {
+                // 浏览器不支持 WebSocket
+                console.log("您的浏览器不支持 WebSocket!");
+            }
         },
 
     },
@@ -318,26 +323,26 @@ export default {
 
 <style scoped lang="scss">
 
-    .goodsInfo {
-        background-color: #80c092;
-        width: 150px;
-        height: 50px;
-        overflow-y:scroll;
-        
-    }
-    .chats {
-        background-color: #80c092;
-        width: auto;
-        height: auto;
-        overflow-y:scroll;
-    }
+.goodsInfo {
+    background-color: #80c092;
+    width: 200px;
+    height: 110px;
+    //overflow-y: scroll;
+
+}
+
+.chats {
+    background-color: #80c092;
+    width: auto;
+    height: auto;
+    overflow-y: scroll;
+}
 
 
+.bg-purple {
+    background: #80c092;
 
-    .bg-purple {
-        background: #80c092;
-
-        .container {
+    .container {
         display: flex;
         background: #EBEDEE;
         height: 160px;
@@ -345,6 +350,8 @@ export default {
         border-radius: 10px;
         margin: 10px 20px;
         align-items: center;
+        text-align: left;
+        justify-content: space-evenly;
 
         .img {
             height: 100px;
@@ -355,22 +362,30 @@ export default {
 
         .desc {
             margin-left: 20px;
-            width: 140px;
+            width: 180px;
 
-            .btn {
-                text-align: right;
+            .title {
+                display: flex;
+                justify-content: space-between;
+                margin-right: 25px;
 
-                .fix {
-                    margin-right: 6px;
-                }
+            }
+        }
+
+        .btn {
+            margin-left: 30px;
+
+            .fix {
+                margin-right: 6px;
             }
         }
     }
-    }
-    .grid-content {
+}
+
+.grid-content {
     border-radius: 4px;
     min-height: 36px;
-    }
+}
 
 
 .massageDetail {
@@ -528,18 +543,27 @@ export default {
     .avatar-container {
         display: flex;
         align-items: center;
-        
+
 
         .avatar {
-            height: 60px;
-            width: 60px;
+            height: 80px;
+            width: 80px;
             border-radius: 50%;
             border: solid 2px pink;
+            margin: 20px;
         }
 
-        .fix {
-            margin-left: 15px;
+        .nickName {
+            font-size: 30px;
+            margin: 0 20px 0;
         }
+
+    }
+
+    .text {
+        text-align: left;
+        margin-left: 20px;
+        margin-top: 10px;
     }
 
     .img-bigContainer {
@@ -548,10 +572,10 @@ export default {
 
         .img-container {
             display: flex;
-            background-color: #98E165;
+
             .img {
-                height: 100px;
-                width: 100px;
+                height: 120px;
+                width: 120px;
             }
         }
     }
@@ -561,8 +585,7 @@ export default {
         align-items: center;
         margin-left: 15px;
         // background-color: #8eb669;
-        height: 120px;
-        
+
         .fix {
             margin-left: 10px;
         }

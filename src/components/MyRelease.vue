@@ -1,81 +1,38 @@
 <template>
     <div>
         <div class="big-container">
-            <div class="container">
+            <div class="container" v-for="(item, index) in myReleaseDes" :key="index">
                 <div>
                     <div class="title">
-                        <div class="img"></div>
-                        <div>
-                            <p>发布时间</p>
-                            <p>类别</p>
-                        </div>
-                    </div>
-                    <p>标题</p>
-                    <div>说明</div>
+                        <img :src=item.picName class="img"></div>
                     <div>
-                        <span>修改</span>
-                        <span>删除</span>
+                        <div class="row">
+                            <div>{{ item.goodsTitle }}</div>
+                            <div>{{ item.goodsType }}</div>
+                        </div>
+                        <div>
+                            <span>{{ item.createTime.substring(0, 10) }}</span>&nbsp;
+                            <span>{{ item.createTime.substring(11, 19) }}</span>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <div class="message">
-                        <div class="avatar"></div>
-                        <div class="desc">
-                            <div>
-                                <span>王花朵</span>
-                                <span class="fix">2022-02-09</span>
-                            </div>
-                            <div>想要</div>
-                        </div>
+                    <div>{{ item.goodsInfo }}</div>
+                    <div>
+                        <el-button size="small">修改</el-button>
+                        <el-button size="small">删除</el-button>
                     </div>
                 </div>
             </div>
-            <div class="container">
-                <div>
-                    <div class="title">
-                        <div class="img"></div>
+            <div>
+                <div class="message">
+                    <div class="avatar"></div>
+                    <div class="desc">
                         <div>
-                            <p>发布时间</p>
-                            <p>类别</p>
+                            <span>王花朵</span>
+                            <span class="fix">2022-02-09</span>
                         </div>
-                    </div>
-                    <p>标题</p>
-                    <div>说明</div>
-                    <div>
-                        <span>修改</span>
-                        <span>删除</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="message">
-                        <div class="avatar"></div>
-                        <div class="desc">
-                            <div>
-                                <span>王花朵</span>
-                                <span class="fix">2022-02-09</span>
-                            </div>
-                            <div>想要</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="avatar"></div>
-                        <div class="desc">
-                            <div>
-                                <span>王花朵</span>
-                                <span class="fix">2022-02-09</span>
-                            </div>
-                            <div>想要</div>
-                        </div>
-                    </div>
-                    <div class="message">
-                        <div class="avatar"></div>
-                        <div class="desc">
-                            <div>
-                                <span>王花朵</span>
-                                <span class="fix">2022-02-09</span>
-                            </div>
-                            <div>想要</div>
-                        </div>
+                        <div>想要</div>
                     </div>
                 </div>
             </div>
@@ -85,13 +42,38 @@
 
 <script>
 export default {
-    name: "MyRelease"
+    name: "MyRelease",
+    data() {
+        return {
+            myReleaseDes: [],
+            userId: ''
+        }
+    },
+    mounted() {
+        this.userId = window.sessionStorage.getItem("userId")
+        console.log(this.userId)
+        this.myRelease();
+    },
+    methods: {
+        myRelease() {
+            this.$http.post("index/getMyGoodsList", {
+                userId: 1,
+            }).then(res => {
+                        if (res.data.code === 200) {
+                            this.myReleaseDes = res.data.data
+                            console.log('发布物品', res)
+                        }
+                    }
+            )
+        }
+    }
 }
 </script>
 
 <style scoped lang="scss">
 .big-container {
     display: flex;
+    flex-wrap: wrap;
 
     .container {
         background: #EBEDEE;
@@ -101,17 +83,22 @@ export default {
         margin: 10px 20px;
         display: flex;
         align-items: flex-start;
+        text-align: left;
 
         .title {
             display: flex;
             align-items: center;
 
             .img {
-                height: 100px;
-                width: 100px;
-                border: #2c3e50 2px solid;
+                height: 120px;
+                width: 120px;
                 margin: 20px 20px;
             }
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-around;
         }
 
         .message {
